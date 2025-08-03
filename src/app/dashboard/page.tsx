@@ -8,6 +8,17 @@ import { MapPin, Calendar, Clock, Settings, LogOut } from 'lucide-react';
 import Link from 'next/link';
 import ConnectProfileButton from '@/components/ConnectProfileButton';
 
+// Extended session interface for our custom properties
+interface ExtendedSession {
+  accessToken?: string;
+  error?: string;
+  user?: {
+    name?: string | null;
+    email?: string | null;
+    image?: string | null;
+  };
+}
+
 export default function Dashboard() {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -144,12 +155,12 @@ export default function Dashboard() {
               {/* Debug info - remove in production */}
               <div className="mt-4 p-3 bg-gray-50 rounded-lg">
                 <p className="text-xs text-gray-500 mb-1">Debug Info:</p>
-                <p className="text-xs text-gray-600">User ID: {session.user?.id || 'No ID'}</p>
+                <p className="text-xs text-gray-600">User Email: {session.user?.email || 'No Email'}</p>
                 <p className="text-xs text-gray-600">
-                  Access Token: {session.accessToken ? '✓ Present' : '✗ Missing'}
+                  Access Token: {(session as ExtendedSession).accessToken ? '✓ Present' : '✗ Missing'}
                 </p>
                 <p className="text-xs text-gray-600">
-                  Session Error: {session.error || 'None'}
+                  Session Error: {(session as ExtendedSession).error || 'None'}
                 </p>
               </div>
             </div>

@@ -4,7 +4,7 @@ import { Plus, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
 import { useState } from 'react';
 
 interface ConnectProfileButtonProps {
-  onSuccess?: (profile: any) => void;
+  onSuccess?: (profile: unknown) => void;
 }
 
 export default function ConnectProfileButton({ onSuccess }: ConnectProfileButtonProps) {

@@ -1,3 +1,4 @@
+// @ts-expect-error - NextAuth v4 typing issue
 import { getToken } from 'next-auth/jwt';
 import { NextRequest, NextResponse } from 'next/server';
 import { GoogleBusinessService } from '@/lib/google-business';
@@ -72,8 +73,6 @@ export async function POST(request: NextRequest) {
 
     // If posting immediately, call Google API
     try {
-      const googleService = new GoogleBusinessService(token.accessToken as string);
-      
       // Create the post using Google Business Profile API
       const googlePost = await GoogleBusinessService.createPost(
         profile.google_location_id,
@@ -113,8 +112,9 @@ export async function POST(request: NextRequest) {
         googlePost
       });
 
-    } catch (googleError: any) {
-      console.error('Google API error:', googleError);
+    } catch (googleError: unknown) {
+      const error = googleError as Error;
+      console.error('Google API error:', error);
       
       // Save failed post to database
       await supabase
@@ -126,31 +126,32 @@ export async function POST(request: NextRequest) {
           media_urls: mediaUrls,
           scheduled_for: now.toISOString(),
           status: 'failed',
-          error_message: googleError.message
+          error_message: error.message
         }]);
 
       // Handle specific Google API errors
-      if (googleError.message?.includes('403')) {
+      if (error.message?.includes('403')) {
         return NextResponse.json({ 
           error: 'Access denied to post on this business profile' 
         }, { status: 403 });
       }
       
-      if (googleError.message?.includes('401')) {
+      if (error.message?.includes('401')) {
         return NextResponse.json({ 
           error: 'Authorization expired. Please reconnect your profile.' 
         }, { status: 401 });
       }
 
       return NextResponse.json({ 
-        error: 'Failed to publish post: ' + googleError.message 
+        error: 'Failed to publish post: ' + error.message 
       }, { status: 500 });
     }
 
-  } catch (error: any) {
-    console.error('Create post error:', error);
+  } catch (error: unknown) {
+    const err = error as Error;
+    console.error('Create post error:', err);
     return NextResponse.json({ 
-      error: 'Internal server error: ' + error.message 
+      error: 'Internal server error: ' + err.message 
     }, { status: 500 });
   }
 }

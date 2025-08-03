@@ -1,9 +1,10 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 import { GoogleBusinessService } from '@/lib/google-business';
 import { supabase } from '@/lib/supabase';
+// @ts-expect-error - NextAuth v4 typing issue
 import { getToken } from 'next-auth/jwt';
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const token = await getToken({ 
       req: request,

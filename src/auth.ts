@@ -1,6 +1,23 @@
-import NextAuth from "next-auth"
+import NextAuth from "next-auth/next"
 import GoogleProvider from "next-auth/providers/google"
 import { SupabaseAdapter } from "@next-auth/supabase-adapter"
+
+interface TokenWithRefresh {
+  refreshToken?: string;
+  [key: string]: unknown;
+}
+
+interface ExtendedSession {
+  accessToken?: string;
+  error?: string;
+  user?: {
+    id?: string;
+    name?: string | null;
+    email?: string | null;
+    image?: string | null;
+  };
+  expires: string;
+}
 
 export default NextAuth({
   adapter: SupabaseAdapter({
@@ -48,12 +65,15 @@ export default NextAuth({
     },
     async session({ session, token }) {
       // Send properties to the client
+      const extendedSession = session as ExtendedSession;
       if (token) {
-        session.accessToken = token.accessToken as string
-        session.error = token.error as string
-        session.user.id = token.id as string
+        extendedSession.accessToken = token.accessToken as string
+        extendedSession.error = token.error as string
+        if (extendedSession.user) {
+          extendedSession.user.id = token.id as string
+        }
       }
-      return session
+      return extendedSession
     },
   },
   pages: {
@@ -64,7 +84,7 @@ export default NextAuth({
   },
 })
 
-async function refreshAccessToken(token: any) {
+async function refreshAccessToken(token: TokenWithRefresh) {
   try {
     const url = "https://oauth2.googleapis.com/token"
     
@@ -77,7 +97,7 @@ async function refreshAccessToken(token: any) {
         client_id: process.env.GOOGLE_CLIENT_ID!,
         client_secret: process.env.GOOGLE_CLIENT_SECRET!,
         grant_type: "refresh_token",
-        refresh_token: token.refreshToken,
+        refresh_token: token.refreshToken || '',
       }),
     })
 
