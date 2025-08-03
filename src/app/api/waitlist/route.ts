@@ -14,6 +14,28 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Check if we're in development with placeholder credentials
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    
+    if (!supabaseUrl || !supabaseKey || supabaseUrl.includes('placeholder') || supabaseKey.includes('placeholder')) {
+      // In development mode without real credentials, simulate success
+      console.log('Development mode: Simulating waitlist signup for:', { email, businessName, businessType });
+      return NextResponse.json(
+        { 
+          message: 'Successfully joined waitlist (development mode)', 
+          data: { 
+            id: 'dev-' + Date.now(),
+            email: email.toLowerCase().trim(),
+            business_name: businessName.trim(),
+            business_type: businessType,
+            created_at: new Date().toISOString()
+          }
+        },
+        { status: 201 }
+      );
+    }
+
     // Insert into waitlist table
     const { data, error } = await supabase
       .from('waitlist')

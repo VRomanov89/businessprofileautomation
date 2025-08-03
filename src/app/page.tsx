@@ -1,4 +1,5 @@
 import { Calendar, Clock, MapPin, Zap } from "lucide-react";
+import Link from "next/link";
 import SignupForm from "@/components/SignupForm";
 
 export default function Home() {
@@ -7,15 +8,15 @@ export default function Home() {
       {/* Header */}
       <header className="container mx-auto px-6 py-8">
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
+          <Link href="/" className="flex items-center space-x-2">
             <MapPin className="h-8 w-8 text-blue-600" />
             <span className="text-2xl font-bold text-gray-900">BPA</span>
-          </div>
-          <nav className="hidden md:flex space-x-8">
-            <a href="#features" className="text-gray-600 hover:text-gray-900">Features</a>
-            <a href="#pricing" className="text-gray-600 hover:text-gray-900">Pricing</a>
-            <a href="#contact" className="text-gray-600 hover:text-gray-900">Contact</a>
-            <a href="/auth/signin" className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Sign In</a>
+          </Link>
+          <nav className="hidden md:flex items-center space-x-8">
+            <Link href="#features" className="text-gray-600 hover:text-gray-900 font-medium">Features</Link>
+            <Link href="/pricing" className="text-gray-600 hover:text-gray-900 font-medium">Pricing</Link>
+            <Link href="/contact" className="text-gray-600 hover:text-gray-900 font-medium">Contact</Link>
+            <Link href="/auth/signin" className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 font-medium transition-colors">Sign In</Link>
           </nav>
         </div>
       </header>
@@ -107,14 +108,58 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
+      <footer className="bg-gray-900 text-white py-16">
         <div className="container mx-auto px-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <MapPin className="h-6 w-6" />
-              <span className="text-xl font-bold">BPA</span>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
+            {/* Company */}
+            <div>
+              <div className="flex items-center space-x-2 mb-4">
+                <MapPin className="h-6 w-6" />
+                <span className="text-xl font-bold">BPA</span>
+              </div>
+              <p className="text-gray-400 mb-4">
+                Automate your Google Business Profile posting and stay visible online.
+              </p>
             </div>
-            <p className="text-gray-400">© 2024 BPA. All rights reserved.</p>
+
+            {/* Product */}
+            <div>
+              <h3 className="text-white font-semibold mb-4">Product</h3>
+              <ul className="space-y-2">
+                <li><Link href="#features" className="text-gray-400 hover:text-white transition-colors">Features</Link></li>
+                <li><Link href="/pricing" className="text-gray-400 hover:text-white transition-colors">Pricing</Link></li>
+                <li><Link href="/auth/signin" className="text-gray-400 hover:text-white transition-colors">Sign In</Link></li>
+                <li><Link href="/dashboard" className="text-gray-400 hover:text-white transition-colors">Dashboard</Link></li>
+              </ul>
+            </div>
+
+            {/* Support */}
+            <div>
+              <h3 className="text-white font-semibold mb-4">Support</h3>
+              <ul className="space-y-2">
+                <li><Link href="/contact" className="text-gray-400 hover:text-white transition-colors">Contact Us</Link></li>
+                <li><a href="mailto:support@yourbpadomain.com" className="text-gray-400 hover:text-white transition-colors">Email Support</a></li>
+              </ul>
+            </div>
+
+            {/* Legal */}
+            <div>
+              <h3 className="text-white font-semibold mb-4">Legal</h3>
+              <ul className="space-y-2">
+                <li><Link href="/privacy" className="text-gray-400 hover:text-white transition-colors">Privacy Policy</Link></li>
+                <li><Link href="/terms" className="text-gray-400 hover:text-white transition-colors">Terms of Service</Link></li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Bottom bar */}
+          <div className="border-t border-gray-800 pt-8">
+            <div className="flex flex-col md:flex-row justify-between items-center">
+              <p className="text-gray-400">© 2024 BPA. All rights reserved.</p>
+              <div className="flex space-x-6 mt-4 md:mt-0">
+                <span className="text-gray-400 text-sm">Made with ❤️ for local businesses</span>
+              </div>
+            </div>
           </div>
         </div>
       </footer>

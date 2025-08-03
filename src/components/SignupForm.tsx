@@ -29,6 +29,7 @@ const businessTypes = [
 export default function SignupForm() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const {
     register,
@@ -41,6 +42,7 @@ export default function SignupForm() {
 
   const onSubmit = async (data: SignupFormData) => {
     setIsSubmitting(true);
+    setSubmitError(null);
     
     try {
       const response = await fetch('/api/waitlist', {
@@ -64,7 +66,7 @@ export default function SignupForm() {
       reset();
     } catch (error) {
       console.error('Signup error:', error);
-      // You could add error state here to show user-friendly error message
+      setSubmitError(error instanceof Error ? error.message : 'Something went wrong. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -89,7 +91,7 @@ export default function SignupForm() {
           {...register('email')}
           type="email"
           placeholder="Enter your email address"
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder-gray-500"
         />
         {errors.email && (
           <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
@@ -101,7 +103,7 @@ export default function SignupForm() {
           {...register('businessName')}
           type="text"
           placeholder="Your business name"
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder-gray-500"
         />
         {errors.businessName && (
           <p className="text-red-500 text-sm mt-1">{errors.businessName.message}</p>
@@ -111,7 +113,7 @@ export default function SignupForm() {
       <div>
         <select
           {...register('businessType')}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900"
           defaultValue=""
         >
           <option value="" disabled>Select your business type</option>
@@ -125,6 +127,12 @@ export default function SignupForm() {
           <p className="text-red-500 text-sm mt-1">{errors.businessType.message}</p>
         )}
       </div>
+
+      {submitError && (
+        <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+          <p className="text-red-700 text-sm">{submitError}</p>
+        </div>
+      )}
 
       <button
         type="submit"
