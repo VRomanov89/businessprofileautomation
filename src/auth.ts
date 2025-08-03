@@ -1,35 +1,104 @@
-// Simplified auth implementation for production compatibility
-// This will be replaced with proper NextAuth once React 19 compatibility is resolved
+import NextAuth from "next-auth"
+import GoogleProvider from "next-auth/providers/google"
+import { SupabaseAdapter } from "@next-auth/supabase-adapter"
 
-export async function auth() {
-  // Mock session for development
-  return {
-    user: {
-      id: "mock-user-id",
-      name: "Demo User",
-      email: "demo@example.com",
-      image: "https://via.placeholder.com/32"
+export default NextAuth({
+  adapter: SupabaseAdapter({
+    url: process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    secret: process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  }),
+  providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      authorization: {
+        params: {
+          scope: [
+            "openid",
+            "email", 
+            "profile",
+            "https://www.googleapis.com/auth/business.manage"
+          ].join(" "),
+          access_type: "offline",
+          prompt: "consent",
+        },
+      },
+    }),
+  ],
+  callbacks: {
+    async jwt({ token, account, user }) {
+      // Store the access token and refresh token in the JWT
+      if (account) {
+        token.accessToken = account.access_token
+        token.refreshToken = account.refresh_token
+        token.accessTokenExpires = account.expires_at
+      }
+      
+      if (user) {
+        token.id = user.id
+      }
+      
+      // Return previous token if the access token has not expired yet
+      if (Date.now() < (token.accessTokenExpires as number) * 1000) {
+        return token
+      }
+      
+      // Access token has expired, try to update it
+      return await refreshAccessToken(token)
+    },
+    async session({ session, token }) {
+      // Send properties to the client
+      if (token) {
+        session.accessToken = token.accessToken as string
+        session.error = token.error as string
+        session.user.id = token.id as string
+      }
+      return session
+    },
+  },
+  pages: {
+    signIn: "/auth/signin",
+  },
+  session: {
+    strategy: "jwt",
+  },
+})
+
+async function refreshAccessToken(token: any) {
+  try {
+    const url = "https://oauth2.googleapis.com/token"
+    
+    const response = await fetch(url, {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      method: "POST",
+      body: new URLSearchParams({
+        client_id: process.env.GOOGLE_CLIENT_ID!,
+        client_secret: process.env.GOOGLE_CLIENT_SECRET!,
+        grant_type: "refresh_token",
+        refresh_token: token.refreshToken,
+      }),
+    })
+
+    const refreshedTokens = await response.json()
+
+    if (!response.ok) {
+      throw refreshedTokens
     }
-  };
-}
 
-export async function signIn(provider: string, options?: { redirectTo?: string }) {
-  // Mock sign in - in production this would redirect to Google OAuth
-  if (options?.redirectTo) {
-    const { redirect } = await import('next/navigation');
-    redirect(options.redirectTo);
+    return {
+      ...token,
+      accessToken: refreshedTokens.access_token,
+      accessTokenExpires: Date.now() + refreshedTokens.expires_in * 1000,
+      refreshToken: refreshedTokens.refresh_token ?? token.refreshToken,
+    }
+  } catch (error) {
+    console.log(error)
+
+    return {
+      ...token,
+      error: "RefreshAccessTokenError",
+    }
   }
 }
-
-export async function signOut(options?: { redirectTo?: string }) {
-  // Mock sign out
-  if (options?.redirectTo) {
-    const { redirect } = await import('next/navigation');
-    redirect(options.redirectTo);
-  }
-}
-
-export const handlers = {
-  GET: async () => new Response('Auth endpoint not implemented', { status: 501 }),
-  POST: async () => new Response('Auth endpoint not implemented', { status: 501 })
-};

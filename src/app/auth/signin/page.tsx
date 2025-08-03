@@ -1,16 +1,17 @@
-import { signIn } from '@/auth';
+'use client';
+
+import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 import { MapPin, Chrome } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 
 export default function SignIn() {
+  const handleGoogleSignIn = () => {
+    signIn('google', { callbackUrl: '/dashboard' });
+  };
+
   return (
-    <form
-      action={async () => {
-        'use server';
-        await signIn('google', { redirectTo: '/dashboard' });
-      }}
-    >
+    <div>
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
         <Navbar />
         <div className="flex items-center justify-center px-4 pt-16 pb-16">
@@ -30,7 +31,8 @@ export default function SignIn() {
             {/* Sign In Card */}
             <div className="bg-white rounded-2xl shadow-xl p-8">
               <button
-                type="submit"
+                type="button"
+                onClick={handleGoogleSignIn}
                 className="w-full flex items-center justify-center space-x-3 bg-white border-2 border-gray-300 rounded-lg px-6 py-4 text-gray-700 font-semibold hover:border-gray-400 hover:shadow-md transition-all duration-200"
               >
                 <Chrome className="h-6 w-6 text-blue-500" />
@@ -81,6 +83,6 @@ export default function SignIn() {
           </div>
         </div>
       </div>
-    </form>
+    </div>
   );
 }

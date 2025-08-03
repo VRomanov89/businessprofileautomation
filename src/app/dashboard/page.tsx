@@ -1,16 +1,40 @@
-import { auth, signOut } from '@/auth';
-import { redirect } from 'next/navigation';
+'use client';
+
+import { useSession, signOut } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 import Image from 'next/image';
 import { MapPin, Calendar, Clock, Settings, LogOut } from 'lucide-react';
 import Link from 'next/link';
 import ConnectProfileButton from '@/components/ConnectProfileButton';
 
-export default async function Dashboard() {
-  const session = await auth();
-  
-  if (!session) {
-    redirect('/auth/signin');
+export default function Dashboard() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (status === 'loading') return; // Still loading
+    if (!session) router.push('/auth/signin'); // Not logged in
+  }, [session, status, router]);
+
+  if (status === 'loading') {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
   }
+
+  if (!session) {
+    return null; // Will redirect
+  }
+
+  const handleSignOut = async () => {
+    await signOut({ callbackUrl: '/' });
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -34,22 +58,15 @@ export default async function Dashboard() {
                 />
               )}
               <span className="text-sm text-gray-700">
-                Welcome, {session.user?.name || 'User'}
+                Welcome, {session.user?.name || session.user?.email || 'User'}
               </span>
-              <form
-                action={async () => {
-                  'use server';
-                  await signOut({ redirectTo: '/' });
-                }}
+              <button
+                onClick={handleSignOut}
+                className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md hover:bg-gray-100"
               >
-                <button
-                  type="submit"
-                  className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md hover:bg-gray-100"
-                >
-                  <LogOut className="h-4 w-4" />
-                  <span>Sign Out</span>
-                </button>
-              </form>
+                <LogOut className="h-4 w-4" />
+                <span>Sign Out</span>
+              </button>
             </div>
           </div>
         </div>
@@ -100,7 +117,44 @@ export default async function Dashboard() {
               </p>
             </div>
 
-            {/* Empty State */}
+            {/* User Info Card */}
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">Account Information</h2>
+              <div className="flex items-center space-x-4">
+                {session.user?.image && (
+                  <Image
+                    src={session.user.image}
+                    alt={session.user.name || 'User'}
+                    width={64}
+                    height={64}
+                    className="h-16 w-16 rounded-full"
+                  />
+                )}
+                <div>
+                  <p className="text-lg font-medium text-gray-900">
+                    {session.user?.name || 'Unknown User'}
+                  </p>
+                  <p className="text-gray-600">{session.user?.email}</p>
+                  <p className="text-sm text-gray-500">
+                    Signed in with Google
+                  </p>
+                </div>
+              </div>
+              
+              {/* Debug info - remove in production */}
+              <div className="mt-4 p-3 bg-gray-50 rounded-lg">
+                <p className="text-xs text-gray-500 mb-1">Debug Info:</p>
+                <p className="text-xs text-gray-600">User ID: {session.user?.id || 'No ID'}</p>
+                <p className="text-xs text-gray-600">
+                  Access Token: {session.accessToken ? '✓ Present' : '✗ Missing'}
+                </p>
+                <p className="text-xs text-gray-600">
+                  Session Error: {session.error || 'None'}
+                </p>
+              </div>
+            </div>
+
+            {/* Connect Profile Section */}
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 text-center">
               <MapPin className="h-12 w-12 text-gray-400 mx-auto mb-4" />
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
