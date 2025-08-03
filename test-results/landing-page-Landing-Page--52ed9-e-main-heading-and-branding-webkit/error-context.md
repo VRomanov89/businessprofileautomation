@@ -1,0 +1,57 @@
+# Page snapshot
+
+```yaml
+- banner:
+  - text: BPA
+  - navigation:
+    - link "Features":
+      - /url: "#features"
+    - link "Pricing":
+      - /url: "#pricing"
+    - link "Contact":
+      - /url: "#contact"
+    - link "Sign In":
+      - /url: /auth/signin
+- main:
+  - heading "Never forget to post to Google again" [level=1]
+  - paragraph: Automate your Google Business Profile posts with our simple scheduling tool. Stay visible while you focus on running your business.
+  - heading "Get Early Access" [level=2]
+  - paragraph: Join the waitlist and be the first to try BPA when we launch.
+  - textbox "Enter your email address"
+  - textbox "Your business name"
+  - combobox:
+    - option "Select your business type" [disabled] [selected]
+    - option "Restaurant/Food Service"
+    - option "Healthcare/Medical"
+    - option "Retail Store"
+    - option "Professional Services"
+    - option "Beauty/Wellness"
+    - option "Auto/Automotive"
+    - option "Real Estate"
+    - option "Fitness/Gym"
+    - option "Education/Training"
+    - option "Other"
+  - button "Join the Waitlist"
+  - paragraph: No spam, ever. We'll only contact you when BPA is ready.
+  - heading "Why BPA?" [level=2]
+  - paragraph: Simple, powerful tools that help your business stay active on Google without the hassle.
+  - heading "Quick Setup" [level=3]
+  - paragraph: Connect your Google Business Profile in under 2 minutes
+  - heading "Smart Scheduling" [level=3]
+  - paragraph: Queue posts weeks in advance with our intuitive calendar
+  - heading "Multi-Location" [level=3]
+  - paragraph: Manage multiple business profiles from one dashboard
+  - heading "Save Time" [level=3]
+  - paragraph: Automate posting while you focus on your customers
+  - heading "Perfect for Local Businesses" [level=2]
+  - heading "5 min" [level=3]
+  - paragraph: Average setup time
+  - heading "24/7" [level=3]
+  - paragraph: Automated posting
+  - heading "3+" [level=3]
+  - paragraph: Profiles supported
+- contentinfo:
+  - text: BPA
+  - paragraph: © 2024 BPA. All rights reserved.
+- alert
+```
