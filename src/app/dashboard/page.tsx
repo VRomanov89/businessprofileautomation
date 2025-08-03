@@ -1,12 +1,14 @@
-'use client';
-
+import { auth, signOut } from '@/auth';
+import { redirect } from 'next/navigation';
+import Image from 'next/image';
 import { MapPin, Plus, Calendar, Clock, Settings, LogOut } from 'lucide-react';
 
-export default function Dashboard() {
-  const handleSignOut = () => {
-    // TODO: Implement real sign out when authentication is set up
-    window.location.href = '/';
-  };
+export default async function Dashboard() {
+  const session = await auth();
+  
+  if (!session) {
+    redirect('/auth/signin');
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -20,16 +22,32 @@ export default function Dashboard() {
             </div>
             
             <div className="flex items-center space-x-4">
+              {session.user?.image && (
+                <Image
+                  src={session.user.image}
+                  alt={session.user.name || 'User'}
+                  width={32}
+                  height={32}
+                  className="h-8 w-8 rounded-full"
+                />
+              )}
               <span className="text-sm text-gray-700">
-                Welcome, Demo User
+                Welcome, {session.user?.name || 'User'}
               </span>
-              <button
-                onClick={handleSignOut}
-                className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md hover:bg-gray-100"
+              <form
+                action={async () => {
+                  'use server';
+                  await signOut({ redirectTo: '/' });
+                }}
               >
-                <LogOut className="h-4 w-4" />
-                <span>Sign Out</span>
-              </button>
+                <button
+                  type="submit"
+                  className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md hover:bg-gray-100"
+                >
+                  <LogOut className="h-4 w-4" />
+                  <span>Sign Out</span>
+                </button>
+              </form>
             </div>
           </div>
         </div>
@@ -89,10 +107,22 @@ export default function Dashboard() {
               <p className="text-gray-600 mb-6 max-w-md mx-auto">
                 Connect your Google Business Profile to start scheduling and automating your posts.
               </p>
-              <button className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                <Plus className="h-4 w-4 mr-2" />
-                Connect Profile
-              </button>
+              <form
+                action={async () => {
+                  'use server';
+                  // This would call the connect-profile API endpoint
+                  // For now it just redirects to show the flow
+                  redirect('/dashboard?connected=true');
+                }}
+              >
+                <button 
+                  type="submit"
+                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Connect Profile
+                </button>
+              </form>
             </div>
 
             {/* Quick Stats */}
