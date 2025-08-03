@@ -1,24 +1,11 @@
 import { Check, MapPin, X } from "lucide-react";
 import Link from "next/link";
+import Navbar from "@/components/Navbar";
 
 export default function Pricing() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      {/* Header */}
-      <header className="container mx-auto px-6 py-8">
-        <div className="flex items-center justify-between">
-          <Link href="/" className="flex items-center space-x-2">
-            <MapPin className="h-8 w-8 text-blue-600" />
-            <span className="text-2xl font-bold text-gray-900">BPA</span>
-          </Link>
-          <nav className="hidden md:flex space-x-8">
-            <Link href="/#features" className="text-gray-600 hover:text-gray-900">Features</Link>
-            <Link href="/pricing" className="text-gray-600 hover:text-gray-900 font-semibold">Pricing</Link>
-            <Link href="/#contact" className="text-gray-600 hover:text-gray-900">Contact</Link>
-            <Link href="/auth/signin" className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Sign In</Link>
-          </nav>
-        </div>
-      </header>
+      <Navbar />
 
       {/* Pricing Section */}
       <main className="container mx-auto px-6 py-16">

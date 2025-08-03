@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { MapPin, Chrome } from 'lucide-react';
+import Navbar from '@/components/Navbar';
 
 export default function SignIn() {
   const [isLoading, setIsLoading] = useState(false);
@@ -12,7 +13,8 @@ export default function SignIn() {
   const handleSignIn = async () => {
     setIsLoading(true);
     try {
-      // For demo purposes, redirect to dashboard
+      // TODO: Implement real Google OAuth when environment variables are configured
+      // For now, simulate successful signin for development
       setTimeout(() => {
         router.push('/dashboard');
       }, 1000);
@@ -24,7 +26,9 @@ export default function SignIn() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+      <Navbar />
+      <div className="flex items-center justify-center px-4 pt-16 pb-16">
       <div className="max-w-md w-full">
         {/* Logo and Header */}
         <div className="text-center mb-8">
@@ -92,6 +96,7 @@ export default function SignIn() {
             ← Back to Home
           </Link>
         </div>
+      </div>
       </div>
     </div>
   );

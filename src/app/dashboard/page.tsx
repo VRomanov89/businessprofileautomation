@@ -4,7 +4,7 @@ import { MapPin, Plus, Calendar, Clock, Settings, LogOut } from 'lucide-react';
 
 export default function Dashboard() {
   const handleSignOut = () => {
-    // Placeholder for sign out functionality
+    // TODO: Implement real sign out when authentication is set up
     window.location.href = '/';
   };
 

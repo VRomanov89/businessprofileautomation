@@ -15,3 +15,10 @@ declare module 'next-auth' {
     image?: string | null;
   }
 }
+
+declare module 'next-auth/jwt' {
+  interface JWT {
+    accessToken?: string;
+    refreshToken?: string;
+  }
+}

@@ -1,18 +1,10 @@
-import { MapPin } from "lucide-react";
 import Link from "next/link";
+import Navbar from "@/components/Navbar";
 
 export default function Privacy() {
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm">
-        <div className="container mx-auto px-6 py-4">
-          <Link href="/" className="flex items-center space-x-2">
-            <MapPin className="h-8 w-8 text-blue-600" />
-            <span className="text-2xl font-bold text-gray-900">BPA</span>
-          </Link>
-        </div>
-      </header>
+      <Navbar className="bg-white shadow-sm" />
 
       {/* Content */}
       <main className="container mx-auto px-6 py-12 max-w-4xl">
