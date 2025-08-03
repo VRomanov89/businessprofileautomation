@@ -155,7 +155,7 @@ export async function getUserAccessToken(userId: string): Promise<string> {
     if (response.ok) {
       return data.access_token;
     }
-  } catch (error) {
+  } catch {
     console.log('Access token expired, refreshing...');
   }
 
