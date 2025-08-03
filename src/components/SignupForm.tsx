@@ -74,9 +74,9 @@ export default function SignupForm() {
     return (
       <div className="text-center p-6 bg-green-50 rounded-lg border border-green-200">
         <div className="text-green-600 text-4xl mb-3">✓</div>
-        <h3 className="text-lg font-semibold text-green-800 mb-2">You're on the list!</h3>
+        <h3 className="text-lg font-semibold text-green-800 mb-2">You&apos;re on the list!</h3>
         <p className="text-green-700">
-          We'll notify you as soon as BPA is ready to launch.
+          We&apos;ll notify you as soon as BPA is ready to launch.
         </p>
       </div>
     );
@@ -135,7 +135,7 @@ export default function SignupForm() {
       </button>
 
       <p className="text-xs text-gray-500 text-center">
-        No spam, ever. We'll only contact you when BPA is ready.
+        No spam, ever. We&apos;ll only contact you when BPA is ready.
       </p>
     </form>
   );

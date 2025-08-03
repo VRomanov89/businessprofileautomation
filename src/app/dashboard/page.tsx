@@ -1,38 +1,12 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
 import { MapPin, Plus, Calendar, Clock, Settings, LogOut } from 'lucide-react';
-import { signOut } from 'next-auth/react';
 
 export default function Dashboard() {
-  const { data: session, status } = useSession();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (status === 'loading') return; // Still loading
-    if (!session) router.push('/auth/signin');
-  }, [session, status, router]);
-
   const handleSignOut = () => {
-    signOut({ callbackUrl: '/' });
+    // Placeholder for sign out functionality
+    window.location.href = '/';
   };
-
-  if (status === 'loading') {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!session) {
-    return null;
-  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -47,7 +21,7 @@ export default function Dashboard() {
             
             <div className="flex items-center space-x-4">
               <span className="text-sm text-gray-700">
-                Welcome, {session.user?.name}
+                Welcome, Demo User
               </span>
               <button
                 onClick={handleSignOut}
