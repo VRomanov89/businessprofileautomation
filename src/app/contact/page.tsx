@@ -4,7 +4,7 @@ import Navbar from "@/components/Navbar";
 export default function Contact() {
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar className="bg-white shadow-sm" />
+      <Navbar />
 
       {/* Content */}
       <main className="container mx-auto px-6 py-12 max-w-2xl">
@@ -66,16 +66,10 @@ export default function Contact() {
           </form>
 
           <div className="mt-8 pt-8 border-t border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Other ways to reach us</h2>
-            <div className="space-y-2 text-gray-600">
-              <p>
-                <strong>Support Email:</strong>{" "}
-                <a href="mailto:support@yourbpadomain.com" className="text-blue-600 hover:underline">
-                  support@yourbpadomain.com
-                </a>
-              </p>
-              <p>
-                <strong>Response Time:</strong> We typically respond within 24 hours
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <p className="text-sm text-blue-800">
+                <strong>Coming Soon:</strong> Full contact system integration.<br />
+                For now, this form is for demonstration purposes.
               </p>
             </div>
           </div>

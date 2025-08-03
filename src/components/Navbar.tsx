@@ -25,7 +25,8 @@ export default function Navbar({ className = "" }: NavbarProps) {
   ];
 
   return (
-    <header className={`container mx-auto px-6 py-8 ${className}`}>
+    <header className={`sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200/50 ${className}`}>
+      <div className="container mx-auto px-6 py-6">
       <div className="flex items-center justify-between">
         <Link href="/" className="flex items-center space-x-2 group">
           <MapPin className="h-8 w-8 text-blue-600 group-hover:text-blue-700 transition-colors" />
@@ -85,6 +86,7 @@ export default function Navbar({ className = "" }: NavbarProps) {
             />
           </svg>
         </button>
+      </div>
       </div>
     </header>
   );

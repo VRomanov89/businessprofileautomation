@@ -3,9 +3,8 @@ import { redirect } from 'next/navigation';
 import Image from 'next/image';
 import { MapPin, Calendar, Clock, Settings, LogOut } from 'lucide-react';
 import Link from 'next/link';
-import ConnectProfileButton from '@/components/ConnectProfileButton';
 
-export default async function Dashboard() {
+export default async function Schedule() {
   const session = await auth();
   
   if (!session) {
@@ -62,16 +61,16 @@ export default async function Dashboard() {
             <nav className="space-y-2">
               <Link
                 href="/dashboard"
-                className="bg-blue-50 text-blue-700 group flex items-center px-3 py-2 text-sm font-medium rounded-md"
+                className="text-gray-700 hover:bg-gray-50 hover:text-blue-700 group flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors"
               >
-                <MapPin className="text-blue-500 mr-3 h-5 w-5" />
+                <MapPin className="text-gray-400 group-hover:text-blue-500 mr-3 h-5 w-5 transition-colors" />
                 Profiles
               </Link>
               <Link
                 href="/dashboard/schedule"
-                className="text-gray-700 hover:bg-gray-50 hover:text-blue-700 group flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors"
+                className="bg-blue-50 text-blue-700 group flex items-center px-3 py-2 text-sm font-medium rounded-md"
               >
-                <Calendar className="text-gray-400 group-hover:text-blue-500 mr-3 h-5 w-5 transition-colors" />
+                <Calendar className="text-blue-500 mr-3 h-5 w-5" />
                 Schedule
               </Link>
               <Link
@@ -94,60 +93,29 @@ export default async function Dashboard() {
           {/* Main Content */}
           <div className="lg:col-span-3">
             <div className="mb-8">
-              <h1 className="text-2xl font-bold text-gray-900 mb-2">Your Business Profiles</h1>
+              <h1 className="text-2xl font-bold text-gray-900 mb-2">Schedule Posts</h1>
               <p className="text-gray-600">
-                Connect your Google Business Profiles to start scheduling posts.
+                Create and schedule posts for your Google Business Profiles.
               </p>
             </div>
 
-            {/* Empty State */}
+            {/* Coming Soon State */}
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 text-center">
-              <MapPin className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+              <Calendar className="h-12 w-12 text-gray-400 mx-auto mb-4" />
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                No profiles connected yet
+                Post Scheduling Coming Soon
               </h3>
               <p className="text-gray-600 mb-6 max-w-md mx-auto">
-                Connect your Google Business Profile to start scheduling and automating your posts.
+                We&apos;re building an intuitive post scheduler that will let you plan weeks of content in advance.
               </p>
-              <ConnectProfileButton />
-            </div>
-
-            {/* Quick Stats */}
-            <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-                <div className="flex items-center">
-                  <div className="flex-shrink-0">
-                    <MapPin className="h-6 w-6 text-blue-600" />
-                  </div>
-                  <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-900">Connected Profiles</p>
-                    <p className="text-2xl font-bold text-gray-700">0</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-                <div className="flex items-center">
-                  <div className="flex-shrink-0">
-                    <Calendar className="h-6 w-6 text-green-600" />
-                  </div>
-                  <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-900">Scheduled Posts</p>
-                    <p className="text-2xl font-bold text-gray-700">0</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-                <div className="flex items-center">
-                  <div className="flex-shrink-0">
-                    <Clock className="h-6 w-6 text-purple-600" />
-                  </div>
-                  <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-900">Posts This Month</p>
-                    <p className="text-2xl font-bold text-gray-700">0</p>
-                  </div>
-                </div>
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 max-w-md mx-auto">
+                <p className="text-sm text-blue-800">
+                  <strong>Coming features:</strong><br />
+                  • Visual content calendar<br />
+                  • Bulk upload and scheduling<br />
+                  • Post templates<br />
+                  • Auto-posting with optimal timing
+                </p>
               </div>
             </div>
           </div>
